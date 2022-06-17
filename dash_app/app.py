@@ -1,34 +1,70 @@
-# Run this app with `python app.py` and
-# visit http://127.0.0.1:8050/ in your web browser.
+import dash
+import dash_bootstrap_components as dbc
+from dash import Input, Output, dcc, html
 
-from dash import Dash, html, dcc
-import plotly.express as px
-import pandas as pd
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-app = Dash(__name__)
+# the style arguments for the sidebar. We use position:fixed and a fixed width
+SIDEBAR_STYLE = {
+    "position": "fixed",
+    "top": 0,
+    "left": 0,
+    "bottom": 0,
+    "width": "16rem",
+    "padding": "2rem 1rem",
+    "background-color": "#f8f9fa",
+}
 
-# assume you have a "long-form" data frame
-# see https://plotly.com/python/px-arguments/ for more options
-df = pd.DataFrame({
-    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-    "Amount": [4, 1, 2, 2, 4, 5],
-    "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
-})
+# the styles for the main content position it to the right of the sidebar and
+# add some padding.
+CONTENT_STYLE = {
+    "margin-left": "18rem",
+    "margin-right": "2rem",
+    "padding": "2rem 1rem",
+}
 
-fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
+sidebar = html.Div(
+    [
+        html.H2("Sidebar", className="display-4"),
+        html.Hr(),
+        html.P(
+            "A simple sidebar layout with navigation links", className="lead"
+        ),
+        dbc.Nav(
+            [
+                dbc.NavLink("Home", href="/", active="exact"),
+                dbc.NavLink("Page 1", href="/page-1", active="exact"),
+                dbc.NavLink("Page 2", href="/page-2", active="exact"),
+            ],
+            vertical=True,
+            pills=True,
+        ),
+    ],
+    style=SIDEBAR_STYLE,
+)
 
-app.layout = html.Div(children=[
-    html.H1(children='Hello Dash'),
+content = html.Div(id="page-content", style=CONTENT_STYLE)
 
-    html.Div(children='''
-        Dash: A web application framework for your data.
-    '''),
+app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
 
-    dcc.Graph(
-        id='example-graph',
-        figure=fig
+
+@app.callback(Output("page-content", "children"), [Input("url", "pathname")])
+def render_page_content(pathname):
+    if pathname == "/":
+        return html.P("This is the content of the home page!")
+    elif pathname == "/page-1":
+        return html.P("This is the content of page 1. Yay!")
+    elif pathname == "/page-2":
+        return html.P("Oh cool, this is page 2!")
+    # If the user tries to reach a different page, return a 404 message
+    return dbc.Jumbotron(
+        [
+            html.H1("404: Not found", className="text-danger"),
+            html.Hr(),
+            html.P(f"The pathname {pathname} was not recognised..."),
+        ]
     )
-])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run_server(debug=True)
