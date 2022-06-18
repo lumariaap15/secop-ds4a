@@ -1,6 +1,9 @@
+from click import style
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
+from pages import dashboard
+from layout import navbar
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -10,15 +13,16 @@ SIDEBAR_STYLE = {
     "top": 0,
     "left": 0,
     "bottom": 0,
-    "width": "16rem",
+    "width": "300px",
     "padding": "2rem 1rem",
-    "background-color": "#f8f9fa",
+    "background-color": "#F8F9F9",
+    "marginTop": "50px"
 }
 
 # the styles for the main content position it to the right of the sidebar and
 # add some padding.
 CONTENT_STYLE = {
-    "margin-left": "18rem",
+    "margin-left": "300px",
     "margin-right": "2rem",
     "padding": "2rem 1rem",
 }
@@ -45,13 +49,13 @@ sidebar = html.Div(
 
 content = html.Div(id="page-content", style=CONTENT_STYLE)
 
-app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
+app.layout = html.Div([dcc.Location(id="url"), sidebar, navbar.navbar, content], style={"background": "#F4F4F4", "minHeight":"100vh"})
 
 
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname == "/":
-        return html.P("This is the content of the home page!")
+        return dashboard.layout
     elif pathname == "/page-1":
         return html.P("This is the content of page 1. Yay!")
     elif pathname == "/page-2":
