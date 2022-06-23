@@ -29,7 +29,7 @@ CONTENT_STYLE = {
 
 sidebar = html.Div(
     [
-        html.H2("Sidebar", className="display-4"),
+        html.H1("Colombian Public Contracting Analytics Dashboard"),
         html.Hr(),
         html.P(
             "A simple sidebar layout with navigation links", className="lead"
@@ -49,7 +49,7 @@ sidebar = html.Div(
 
 content = html.Div(id="page-content", style=CONTENT_STYLE)
 
-app.layout = html.Div([dcc.Location(id="url"), sidebar, navbar.navbar, content], style={"background": "#F4F4F4", "minHeight":"100vh"})
+app.layout = html.Div([dcc.Location(id="url"), sidebar, navbar.navbar, content])
 
 
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
