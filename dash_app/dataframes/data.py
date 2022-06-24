@@ -8,3 +8,5 @@ df = pd.DataFrame({
 })
 
 fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
+
+df2 = pd.read_csv('./dataframes/csv/SECOP_Electronicos_Cleaned.csv', low_memory=False)

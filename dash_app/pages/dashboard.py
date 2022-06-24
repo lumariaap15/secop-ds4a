@@ -1,6 +1,6 @@
 ### Import Packages ###
 from dash import dcc, html
-from dataframes.data import fig
+from dataframes.data import fig, df2
 import dash_bootstrap_components as dbc
 
 ### Import Dash Instance ###
@@ -12,22 +12,24 @@ graph = dcc.Graph(
         figure=fig
     )
 
+columns = []
+for col in df2.columns:
+    columns.append(html.P(col))
+
 layout = html.Div([
     dbc.Card(
         dbc.CardBody([
             dbc.Row([
+                dbc.Col(columns, width=3),
                 dbc.Col([
                     graph
-                ], width=3),
+                ], width=12),
                 dbc.Col([
                     graph
-                ], width=3),
+                ], width=6),
                 dbc.Col([
                     graph
-                ], width=3),
-                dbc.Col([
-                    graph
-                ], width=3),
+                ], width=6),
             ], align='center'), 
             html.Br(),
             dbc.Row([
