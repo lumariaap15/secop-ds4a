@@ -3,27 +3,6 @@ from dash import html
 
 LOGO_INGES = "../assets/logo_inges.png"
 
-"""
-navbar = dbc.NavbarSimple(
-    children=[
-        html.Img(src=LOGO_INGES, height="30px"),
-        dbc.NavItem(dbc.NavLink("Page 1", href="#")),
-        dbc.DropdownMenu(
-            children=[
-                dbc.DropdownMenuItem("More pages", header=True),
-                dbc.DropdownMenuItem("Page 2", href="#"),
-                dbc.DropdownMenuItem("Page 3", href="#"),
-            ],
-            nav=True,
-            in_navbar=True,
-            label="More",
-        ),
-    ],
-    color="light",
-    dark=False,
-)
-"""
-
 navbar = dbc.Navbar(
     dbc.Container(
         [
@@ -42,7 +21,8 @@ navbar = dbc.Navbar(
             html.Div(
                 [
                     dbc.NavItem(dbc.NavLink("Dashboard", href="/")),
-                    dbc.NavItem(dbc.NavLink("Models", href="/page-2"))
+                    dbc.NavItem(dbc.NavLink("Model Wveimar", href="/model-wveimar")),
+                    dbc.NavItem(dbc.NavLink("Model Luisa", href="/model-luisa"))
                 ],
                 style={"display": "flex"}
             ),

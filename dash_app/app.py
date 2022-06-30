@@ -4,6 +4,8 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 from pages import dashboard
 from pages import maps
+from pages import model_luisa
+from pages import model_wveimar
 from layout import navbar
 from layout import sidebar
 
@@ -29,6 +31,10 @@ def render_page_content(pathname):
         return maps.layout
     elif pathname == "/page-1":
         return html.P("This is the content of page 1. Yay!")
+    elif pathname == "/model-wveimar":
+        return model_wveimar.layout
+    elif pathname == "/model-luisa":
+        return model_luisa.layout
     elif pathname == "/page-2":
         return html.P("Oh cool, this is page 2!")
     # If the user tries to reach a different page, return a 404 message
