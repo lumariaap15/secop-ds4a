@@ -1,22 +1,20 @@
-from dash import Dash, dcc, html, callback
-from dash.dependencies import Input, Output
-
-app = Dash(__name__)
+from dash import Dash, dcc, html, Input, Output, State, callback
+import dash_bootstrap_components as dbc
 
 layout = html.Div(
     [
-        html.I("Try typing in input 1 & 2, and observe how debounce is impacting the callbacks. Press Enter and/or Tab key in Input 2 to cancel the delay"),
+        html.Div(dcc.Input(id='input-on-submit', type='text')),
+        dbc.Button(['Predict'],id="submit-val", className="btn-block mt-3", n_clicks=0),
         html.Br(),
-        dcc.Input(id="input1", type="text", placeholder="", style={'marginRight':'10px'}),
-        dcc.Input(id="input2", type="text", placeholder="", debounce=True),
-        html.Div(id="output"),
+        html.Br(),
+        html.Div(id='container-button-basic', children='')
     ]
 )
 
-@app.callback(
-    Output("output", "children"),
-    Input("input1", "value"),
-    Input("input2", "value"),
+@callback(
+    Output('container-button-basic', 'children'),
+    Input('submit-val', 'n_clicks'),
+    [State('input-on-submit', 'value')], prevent_initial_call=True
 )
-def update_output(input1, input2):
-    return u'Input 1 {} and Input 2 {}'.format(input1, input2)
+def update_output(n_clicks, value):
+    return 'The delay prediction is "{}" day(s)'.format(value)
