@@ -5,7 +5,7 @@ from dash import Input, Output, dcc, html
 from pages import dashboard
 from pages import maps
 from pages import model_luisa
-from pages import model_wveimar
+from pages import predict
 from layout import navbar
 from layout import sidebar
 
@@ -31,8 +31,8 @@ def render_page_content(pathname):
         return maps.layout
     elif pathname == "/page-1":
         return html.P("This is the content of page 1. Yay!")
-    elif pathname == "/model-wveimar":
-        return model_wveimar.layout
+    elif pathname == "/predict":
+        return predict.layout
     elif pathname == "/model-luisa":
         return model_luisa.layout
     elif pathname == "/page-2":
