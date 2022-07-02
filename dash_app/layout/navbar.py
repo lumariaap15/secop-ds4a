@@ -21,7 +21,7 @@ navbar = dbc.Navbar(
             html.Div(
                 [
                     dbc.NavItem(dbc.NavLink("Dashboard", href="/")),
-                    dbc.NavItem(dbc.NavLink("Model Wveimar", href="/model-wveimar")),
+                    dbc.NavItem(dbc.NavLink("Predict", href="/predict")),
                     dbc.NavItem(dbc.NavLink("Model Luisa", href="/model-luisa"))
                 ],
                 style={"display": "flex"}
