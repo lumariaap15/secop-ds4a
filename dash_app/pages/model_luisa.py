@@ -60,24 +60,90 @@ rama_select = html.Div(
     className="mb-3",
 )
 
-
-
-email_input = html.Div(
+entidad_centralizada_options = []
+for item in df2["Entidad Centralizada"].unique():
+    entidad_centralizada_options.append({"label": item, "value": item})
+entidad_centralizada_select = html.Div(
     [
-        dbc.Label("Email", html_for="example-email"),
-        dbc.Input(type="email", id="example-email", placeholder="Enter email")
+        dbc.Label("Entidad Centralizada", html_for="entidad_centralizada"),
+        dcc.Dropdown(
+            id="entidad_centralizada",
+            options=entidad_centralizada_options,
+        ),
     ],
     className="mb-3",
 )
 
-password_input = html.Div(
+estado_contrato_options = []
+for item in df2["Estado Contrato"].unique():
+    estado_contrato_options.append({"label": item, "value": item})
+estado_contrato_select = html.Div(
     [
-        dbc.Label("Password", html_for="example-password"),
-        dbc.Input(
-            type="password",
-            id="example-password",
-            placeholder="Enter password",
-        )
+        dbc.Label("Estado de Contrato", html_for="estado_contrato"),
+        dcc.Dropdown(
+            id="estado_contrato",
+            options=estado_contrato_options,
+        ),
+    ],
+    className="mb-3",
+)
+
+tipo_contrato_options = []
+for item in df2["Tipo de Contrato"].unique():
+    tipo_contrato_options.append({"label": item, "value": item})
+tipo_contrato_select = html.Div(
+    [
+        dbc.Label("Tipo de Contrato", html_for="tipo_contrato"),
+        dcc.Dropdown(
+            id="tipo_contrato",
+            options=tipo_contrato_options,
+        ),
+    ],
+    className="mb-3",
+)
+
+modalidad_contratacion_options = []
+for item in df2["Modalidad de Contratacion"].unique():
+    modalidad_contratacion_options.append({"label": item, "value": item})
+modalidad_contratacion_select = html.Div(
+    [
+        dbc.Label("Modalidad de Contratación", html_for="modalidad_contratacion"),
+        dcc.Dropdown(
+            id="modalidad_contratacion",
+            options=modalidad_contratacion_options,
+        ),
+    ],
+    className="mb-3",
+)
+
+switches_input = html.Div(
+    [
+        dbc.Checklist(
+            options=[
+                {"label": "Es Grupo", "value": "es_grupo"},
+                {"label": "Es Pyme", "value": "es_pyme"},
+                {"label": "Obligación Ambiental", "value": "obligacion_ambiental"},
+                {"label": "Obligaciones Postconsumo", "value": "obligaciones_postconsumo"},
+            ],
+            value=[1],
+            id="switches-input",
+            switch=True,
+        ),
+    ]
+)
+
+valor_contrato_input = html.Div(
+    [
+        dbc.Label("Valor del Contrato", html_for="valor_contrato"),
+        dbc.Input(type="number", id="valor_contrato", value="0")
+    ],
+    className="mb-3",
+)
+
+valor_pago_adelantado_input = html.Div(
+    [
+        dbc.Label("Valor del Pago Adelantado", html_for="valor_pago_adelantado"),
+        dbc.Input(type="number", id="valor_pago_adelantado", value="0")
     ],
     className="mb-3",
 )
@@ -87,8 +153,13 @@ form = dbc.Form([
     orden_select, 
     sector_select, 
     rama_select, 
-    email_input, 
-    password_input
+    entidad_centralizada_select,
+    estado_contrato_select,
+    tipo_contrato_select,
+    modalidad_contratacion_select,
+    switches_input,
+    valor_contrato_input,
+    valor_pago_adelantado_input
 ])
 
 layout = html.Div([
