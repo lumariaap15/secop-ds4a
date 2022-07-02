@@ -1,1 +1,17 @@
-Realizar la actualización diferencial de la base de datos
+
+*Colocar en el documento ultimos cambios realizados al data cleaning:
+    Seleccion de contratos unicamente despues de 2019
+
+*Ampliar columna 'Origen de los Recursos' para categorizar el origen de los recursos de manera mas 
+ 
+ 
+
+*Crear variables binarias
+    PGN - Presupuesto General Nacion
+    SGP - Sistema General Participaciones
+    SGR - Sistema General Regalias
+    RP_AGR - Recursos Propios entidades Alcaldias, Gobernaciones, Resguardos Indigenas
+    RP_NO_AGR - Recursos Propios Entidaddes diferentes a AGR
+    RC - Recursos Credito
+ 
+ *Revisar columnas de 'Valores' para evitar problemas de multicolinealidad.
