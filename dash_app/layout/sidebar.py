@@ -1,7 +1,7 @@
 from dash import Input, Output, dcc, html
 import dash_bootstrap_components as dbc
 
-from components.sampledf.model import df_maptest
+from dataframes.contratos_departamento import df_maptest
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 

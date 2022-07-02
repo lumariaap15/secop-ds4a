@@ -1,2 +1,4 @@
-dash_app/dataframes/csv/*
+dash_app/assets/csv/*
 data_cleaning2.ipynb
+__pycache__/
+.ipynb_checkpoints/
