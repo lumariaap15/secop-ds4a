@@ -2,11 +2,11 @@
 from dash import html , dcc, callback, Input, Output, State
 import dash_bootstrap_components as dbc
 
-from components.maps.mapcol_departamentos import mapcol_departamentos
+from components.mapcol_departamentos import mapcol_departamentos
 
 
-from components.sampledf.model import df_maptest
-from components.table.table import table
+from dataframes.contratos_departamento import df_maptest
+from components.table_departamentos import table
 
 
 mapa_colombia_departamentos = mapcol_departamentos('Cantidad de proyectos por departamento en Colombia', 'div_municipios_fig2',df_maptest)
