@@ -13,3 +13,36 @@ h1 {
     font-weight: 700;
 }
 
+.sidebar-subtitle {
+    color: #58BDE5;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background: #58BDE5;
+    border: none !important;
+    box-shadow: 3px 3px 10px #58BDE5;
+    transition: all .2s;
+}
+
+.btn-primary:hover {
+    background: #58BDE5;
+    transform: scale(1.05);
+    box-shadow: 5px 5px 25px #58BDE5;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+a,.nav-link,a:hover,.nav-link:hover {
+    color: #58BDE5;
+}
+
+.card {
+    border: none;
+}
