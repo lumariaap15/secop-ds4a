@@ -3,7 +3,7 @@ from dash.dependencies import Input, Output
 
 app = Dash(__name__)
 
-app.layout = html.Div(
+layout = html.Div(
     [
         html.I("Try typing in input 1 & 2, and observe how debounce is impacting the callbacks. Press Enter and/or Tab key in Input 2 to cancel the delay"),
         html.Br(),
