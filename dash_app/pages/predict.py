@@ -327,22 +327,45 @@ layout = html.Div(
         html.H3("Contracts Delay Prediction"),
         html.H6("Select the contract variables and press button below to see the prediction"),
         dbc.Card([form], className="p-3"),        
-        html.Br(),
-        html.Div(dcc.Input(id='input-on-submit', type='text')),
+        #html.Br(),
+        #html.Div(dcc.Input(id='input-on-submit', type='text')),
         dbc.Button(['Predict'],id="submit-val", className="btn-block mt-3", n_clicks=0),
         html.Br(),
-        html.Div(id='container-button-basic', children='')
+        html.Br(),
+        html.Div(id='container', children='')
     ]
 )
 
 @callback(
-    Output('container-button-basic', 'children'),
-    Input('submit-val', 'n_clicks'),
-    [State('input-on-submit', 'value')], prevent_initial_call=True
+    Output('container', 'children'),
+    [Input("submit-val", "n_clicks")],
+    [State("departamento", "value"), 
+     State("orden", "value"), 
+     State("sector", "value"), 
+     State("rama", "value"),
+     State("entidad_centralizada", "value"),
+     State("estado_contrato", "value"),
+     State("tipo_contrato", "value"),
+     State("modalidad_contratacion", "value"),
+     State("destino_gasto", "value")
+    ]
+    , prevent_initial_call=True
 )
-def update_output(n_clicks, value):    
-    prediction = XGBoost_predict(value)
-    return 'The delay prediction for {} is "{}"'.format(value, prediction['Delay prediction'])
+def update_output(n_clicks, departamento, orden, sector, rama, entidad_centralizada, estado_contrato, tipo_contrato, 
+                 modalidad_contratacion, destino_gasto):
+    variables = {}
+    variables["Departamento"] = departamento
+    variables["Orden"] = orden
+    variables["Sector"] = sector
+    variables["Rama"] = rama
+    variables["Entidad Centralizada"] = entidad_centralizada
+    variables["Estado Contrato"] = estado_contrato
+    variables["Tipo de Contrato"] = tipo_contrato
+    variables["Modalidad de Contratacion"] = modalidad_contratacion
+    variables["Destino Gasto"] = destino_gasto
+    
+    prediction = XGBoost_predict(n_clicks)
+    return 'The delay prediction for {0} "{1}"'.format(variables, prediction['Delay prediction'])
 
 def prepare_model_data(x_variables):
     return x_variables
@@ -352,7 +375,6 @@ def load_model():
     return joblib.load(model)
 
 def XGBoost_predict(x_variables):
-
     prepared_data = prepare_model_data(x_variables)
     #prediction = load_model().predict(prepared_data)
     return {'Delay prediction': 'No'}
