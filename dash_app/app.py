@@ -10,6 +10,7 @@ from layout import navbar
 from layout import sidebar
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+app.config.suppress_callback_exceptions=True
 
 # the styles for the main content position it to the right of the sidebar and
 # add some padding.
