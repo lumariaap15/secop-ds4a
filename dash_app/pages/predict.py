@@ -296,8 +296,8 @@ switches_input = html.Div(
                 {"label": "Recursos Propios", "value": "es_rp_no_agr"},
                 {"label": "Recursos de Crédito", "value": "es_rc"},
             ],
-            value=[1],
-            id="switches-input",
+            #value=[1],
+            id="switches_input",
             switch=True,
         ),
     ]
@@ -329,7 +329,7 @@ layout = html.Div(
         dbc.Card([form], className="p-3"),        
         #html.Br(),
         #html.Div(dcc.Input(id='input-on-submit', type='text')),
-        dbc.Button(['Predict'],id="submit-val", className="btn-block mt-3", n_clicks=0),
+        dbc.Button(['Predict'],id="submit_val", className="btn-block mt-3", n_clicks=0),
         html.Br(),
         html.Br(),
         html.Div(id='container', children='')
@@ -338,7 +338,7 @@ layout = html.Div(
 
 @callback(
     Output('container', 'children'),
-    [Input("submit-val", "n_clicks")],
+    [Input("submit_val", "n_clicks")],
     [State("departamento", "value"), 
      State("orden", "value"), 
      State("sector", "value"), 
@@ -347,12 +347,19 @@ layout = html.Div(
      State("estado_contrato", "value"),
      State("tipo_contrato", "value"),
      State("modalidad_contratacion", "value"),
-     State("destino_gasto", "value")
+     State("destino_gasto", "value"),
+     State("valor_contrato", "value"),
+     State("valor_pago_adelantado", "value"),
+     State("valor_facturado", "value"),
+     State("valor_pendiente_pago", "value"),
+     State("valor_amortizado", "value"),
+     State("switches_input", "value")
     ]
     , prevent_initial_call=True
 )
 def update_output(n_clicks, departamento, orden, sector, rama, entidad_centralizada, estado_contrato, tipo_contrato, 
-                 modalidad_contratacion, destino_gasto):
+                 modalidad_contratacion, destino_gasto, valor_contrato, valor_pago_adelantado, valor_facturado,
+                 valor_pendiente_pago, valor_amortizado, switches_input):
     variables = {}
     variables["Departamento"] = departamento
     variables["Orden"] = orden
@@ -363,6 +370,12 @@ def update_output(n_clicks, departamento, orden, sector, rama, entidad_centraliz
     variables["Tipo de Contrato"] = tipo_contrato
     variables["Modalidad de Contratacion"] = modalidad_contratacion
     variables["Destino Gasto"] = destino_gasto
+    variables["Valor del Contrato"] = valor_contrato
+    variables["Valor del Pago Adelantado"] = valor_pago_adelantado
+    variables["Valor Facturado"] = valor_facturado
+    variables["Valor Pendiente de Pago"] = valor_pendiente_pago
+    variables["Valor Amortizado"] = valor_amortizado
+    variables["Switches"] = switches_input
     
     prediction = XGBoost_predict(n_clicks)
     return 'The delay prediction for {0} "{1}"'.format(variables, prediction['Delay prediction'])
