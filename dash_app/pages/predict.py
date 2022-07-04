@@ -3,6 +3,8 @@ import dash_bootstrap_components as dbc
 from dataframes.data import df2
 from datetime import date
 from datetime import datetime
+import pandas as pd
+import pickle
 
 departamentos_options = []
 for item in df2["Departamento"].unique():
@@ -430,7 +432,7 @@ def update_output(n_clicks, departamento, orden, sector, rama, entidad_centraliz
     variables["Modalidad de Contratacion"] = modalidad_contratacion
     variables["Es Grupo"] = int('es_grupo' in switches_input) if switches_input != None else 0
     variables["Es Pyme"] = int('es_pyme' in switches_input) if switches_input != None else 0
-    variables["Oblicación Ambiental"] = int('obligacion_ambiental' in switches_input) if switches_input != None else 0
+    variables["Obligación Ambiental"] = int('obligacion_ambiental' in switches_input) if switches_input != None else 0
     variables["Obligaciones Postconsumo"] = int('obligaciones_postconsumo' in switches_input) if switches_input != None else 0
     variables["Valor del Contrato"] = int(valor_contrato)
     variables["Valor del Pago Adelantado"] = int(valor_pago_adelantado)
@@ -448,20 +450,36 @@ def update_output(n_clicks, departamento, orden, sector, rama, entidad_centraliz
     
     fecha_fin_contrato = datetime.strptime(fecha_fin_contrato, '%Y-%m-%d').date()
     fecha_fin_ano_contrato = datetime.strptime(str(fecha_fin_contrato.year) + '-12-31', '%Y-%m-%d').date()
-    variables["Days_to_end_of_year"] = (fecha_fin_ano_contrato-fecha_fin_contrato).days  
+    variables["Days_to_end_of_year"] = (fecha_fin_ano_contrato-fecha_fin_contrato).days
     
-    prediction = XGBoost_predict(n_clicks)
-    #return 'The delay prediction for {0} "{1}"'.format(variables, prediction['Delay prediction'])
-    return str(variables)
+    prediction = XGBoost_predict(variables)
+    return 'The delay prediction for this contract is {0}'.format(prediction)
+    #return str(variables)
 
-def prepare_model_data(x_variables):
-    return x_variables
+def XGBoost_predict(variables):
+    df_input = prepare_model_data(variables)
+    prediction = load_model().predict(df_input)[0]
+    return normalize_prediction(prediction)
+
+def prepare_model_data(variables):
+    df_input = pd.DataFrame.from_dict(variables, orient='index').T
+
+    cat_cols = ['Departamento', 'Orden', 'Sector', 'Rama', 'Entidad Centralizada', 'Estado Contrato', 
+                'Tipo de Contrato', 'Modalidad de Contratacion', 'Es Grupo','Es Pyme', 'Destino Gasto', 
+                'EsPostConflicto', 'Obligaciones Postconsumo', 'Obligación Ambiental']
+
+    cat_values = {key:'category' for key in cat_cols}
+    df_input = df_input.astype(cat_values)
+
+    cols = df_input.select_dtypes(include='object').columns
+    df_input[cols] = df_input[cols].astype('int')    
+    
+    return df_input
 
 def load_model():
-    model = open('../assets/model/clf_model.pkl', 'rb')
-    return joblib.load(model)
+    return pickle.load(open('assets/model/clf_model.pkl', 'rb'))
 
-def XGBoost_predict(x_variables):
-    prepared_data = prepare_model_data(x_variables)
-    #prediction = load_model().predict(prepared_data)
-    return {'Delay prediction': 'No'}
+def normalize_prediction(prediction):
+    possible_results = {0: "None", 1: "Low", 2: "Medium", 3: "High"}
+    return possible_results[prediction]
+
