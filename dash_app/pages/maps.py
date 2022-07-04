@@ -7,6 +7,7 @@ from components.mapcol_departamentos import mapcol_departamentos
 
 from dataframes.contratos_departamento import df_maptest
 from components.table_departamentos import table
+from components.contract_type_graphs import contract_type_count_pie_chart
 
 
 mapa_colombia_departamentos = mapcol_departamentos('Cantidad de proyectos por departamento en Colombia', 'div_municipios_fig2',df_maptest)
@@ -74,13 +75,29 @@ layout= html.Div(
             ])],className="mb-3"
         ),
 
-        dbc.Card(
-            dbc.CardBody([
-                html.H3("Proyectos por departamento"),
-                html.Div([
-                    tabla_datos_departamentos.display()
-                ],id="row_tabla")   
-            ])
+        
+
+        dbc.Row(
+            [dbc.Col([
+                dbc.Card(
+                    dbc.CardBody([
+                        html.H3("Proyectos por departamento"),
+                        html.Div([
+                            tabla_datos_departamentos.display()
+                        ],id="row_tabla")   
+                    ])
+                ),
+            ]),
+            dbc.Col([
+                dbc.Card(
+                    dbc.CardBody([
+                        html.H3("Contract Types"),
+                        dcc.Graph(
+                            figure=contract_type_count_pie_chart
+                        )
+                    ])
+                ),
+            ])]
         ),
     ]
 )  
