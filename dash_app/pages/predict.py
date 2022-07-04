@@ -286,15 +286,15 @@ switches_input = html.Div(
             options=[
                 {"label": "Es Grupo", "value": "es_grupo"},
                 {"label": "Es Pyme", "value": "es_pyme"},
-                {"label": "Obligación Ambiental", "value": "obligacion_ambiental"},
-                {"label": "Obligaciones Postconsumo", "value": "obligaciones_postconsumo"},
+                {"label": "Tiene Obligación Ambiental", "value": "obligacion_ambiental"},
+                {"label": "Tiene Obligaciones Postconsumo", "value": "obligaciones_postconsumo"},
                 {"label": "Es Postconflicto", "value": "es_postconflicto"},
-                {"label": "Presupuesto General de la Nación", "value": "es_pgn"},
-                {"label": "Sistema General de Participaciones", "value": "es_sgp"},
-                {"label": "Sistema Geenral de Regalías", "value": "es_sgr"},
-                {"label": "Recursos Propios (Alcaldías Gobernaciones y Resguardos Indígenas)", "value": "es_rp_agr"},
-                {"label": "Recursos Propios", "value": "es_rp_no_agr"},
-                {"label": "Recursos de Crédito", "value": "es_rc"},
+                {"label": "Tiene Presupuesto General de la Nación", "value": "es_pgn"},
+                {"label": "Tiene Presupuesto Sistema General de Participaciones", "value": "es_sgp"},
+                {"label": "Tiene Presupuesto Sistema General de Regalías", "value": "es_sgr"},
+                {"label": "Tiene Recursos Propios (Alcaldías Gobernaciones y Resguardos Indígenas)", "value": "es_rp_agr"},
+                {"label": "Tiene Recursos Propios", "value": "es_rp_no_agr"},
+                {"label": "Tiene Recursos de Crédito", "value": "es_rc"},
             ],
             #value=[1],
             id="switches_input",
@@ -402,13 +402,23 @@ def update_output(n_clicks, departamento, orden, sector, rama, entidad_centraliz
     variables["Estado Contrato"] = estado_contrato
     variables["Tipo de Contrato"] = tipo_contrato
     variables["Modalidad de Contratacion"] = modalidad_contratacion
+    variables["Es Grupo"] = int('es_grupo' in switches_input) if switches_input != None else 0
+    variables["Es Pyme"] = int('es_pyme' in switches_input) if switches_input != None else 0
+    variables["Oblicación Ambiental"] = int('obligacion_ambiental' in switches_input) if switches_input != None else 0
+    variables["Obligaciones Postconsumo"] = int('obligaciones_postconsumo' in switches_input) if switches_input != None else 0
+    variables["Valor del Contrato"] = int(valor_contrato)
+    variables["Valor del Pago Adelantado"] = int(valor_pago_adelantado)
+    variables["Valor Facturado"] = int(valor_facturado)
+    variables["Valor Pendiente de Pago"] = int(valor_pendiente_pago)
+    variables["Valor Amortizado"] = int(valor_amortizado)
+    variables["EsPostConflicto"] = int('es_postconflicto' in switches_input) if switches_input != None else 0
     variables["Destino Gasto"] = destino_gasto
-    variables["Valor del Contrato"] = valor_contrato
-    variables["Valor del Pago Adelantado"] = valor_pago_adelantado
-    variables["Valor Facturado"] = valor_facturado
-    variables["Valor Pendiente de Pago"] = valor_pendiente_pago
-    variables["Valor Amortizado"] = valor_amortizado
-    variables["Switches"] = switches_input
+    variables["PGN"] = int('es_pgn' in switches_input) if switches_input != None else 0
+    variables["SGP"] = int('es_sgp' in switches_input) if switches_input != None else 0
+    variables["SGR"] = int('es_sgr' in switches_input) if switches_input != None else 0
+    variables["RP_AGR"] = int('es_rp_agr' in switches_input) if switches_input != None else 0
+    variables["RP_NO_AGR"] = int('es_rp_no_agr' in switches_input) if switches_input != None else 0
+    variables["RC"] = int('es_rc' in switches_input) if switches_input != None else 0
     
     prediction = XGBoost_predict(n_clicks)
     return 'The delay prediction for {0} "{1}"'.format(variables, prediction['Delay prediction'])
@@ -417,7 +427,7 @@ def prepare_model_data(x_variables):
     return x_variables
 
 def load_model():
-    model = open('model.pkl', 'rb')
+    model = open('../assets/model/clf_model.pkl', 'rb')
     return joblib.load(model)
 
 def XGBoost_predict(x_variables):
