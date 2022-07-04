@@ -22,12 +22,18 @@ for iframe in df_maptest.DEPARTAMENTO:
     info = { 'label': iframe , 'value': iframe}
     content.append(info)  
 
-sidebar = html.Div(
+sidebarTitle = html.Div(
     [
         html.P(
             "Public contracts delay classificator", className="sidebar-subtitle"
         ),
-        html.H1("Colombian Public Contracting Analytics Dashboard"),
+        html.H1("Colombian Public Contracting Analytics Dashboard")
+    ]
+)
+
+sidebar = html.Div(
+    [
+        sidebarTitle,
         html.Hr(),
         html.Div([
                     html.Div(['Seleccione los departamentos'], className="mb-2  selector-label"),
@@ -50,6 +56,13 @@ sidebar = html.Div(
         dbc.Button([
                     'Filtrar'
                 ],id="id_filtrar",className="btn-block mt-3")
+    ],
+    style=SIDEBAR_STYLE,
+)
+
+sidebar2 = html.Div(
+    [
+        sidebarTitle
     ],
     style=SIDEBAR_STYLE,
 )

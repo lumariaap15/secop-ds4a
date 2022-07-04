@@ -2,9 +2,7 @@ from click import style
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
-from pages import dashboard
 from pages import maps
-from pages import model_luisa
 from pages import predict
 from layout import navbar
 from layout import sidebar
@@ -30,14 +28,8 @@ app.layout = html.Div([dcc.Location(id="url"), sidebar.sidebar, navbar.navbar, c
 def render_page_content(pathname):
     if pathname == "/":
         return maps.layout
-    elif pathname == "/page-1":
-        return html.P("This is the content of page 1. Yay!")
     elif pathname == "/predict":
         return predict.layout
-    elif pathname == "/model-luisa":
-        return model_luisa.layout
-    elif pathname == "/page-2":
-        return html.P("Oh cool, this is page 2!")
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
         [

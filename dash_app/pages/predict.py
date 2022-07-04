@@ -303,6 +303,7 @@ switches_input = html.Div(
     ]
 )
 
+"""
 form = dbc.Form([
     departamentos_select, 
     orden_select, 
@@ -320,6 +321,38 @@ form = dbc.Form([
     valor_amortizado_input,
     switches_input,
 ])
+"""
+
+form = dbc.Form([
+    dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        departamentos_select, 
+                        orden_select, 
+                        sector_select, 
+                        rama_select, 
+                        entidad_centralizada_select,
+                        estado_contrato_select,
+                        tipo_contrato_select,
+                        modalidad_contratacion_select,
+                        destino_gasto_select,   
+                        valor_contrato_input,
+                    ]
+                ),
+                dbc.Col(
+                    [ 
+                        valor_pago_adelantado_input,
+                        valor_facturado_input,
+                        valor_pendiente_pago_input,
+                        valor_amortizado_input,
+                        switches_input,
+                    ]
+                )
+            ],
+    )
+])
+
 
 
 layout = html.Div(
