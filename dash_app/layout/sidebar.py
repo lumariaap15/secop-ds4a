@@ -16,12 +16,6 @@ SIDEBAR_STYLE = {
     "marginTop": "50px"
 }
 
-info = {}
-content = [{"label": "TODOS", "value": "TODOS"}]
-for iframe in df_maptest.DEPARTAMENTO:
-    info = { 'label': iframe , 'value': iframe}
-    content.append(info)  
-
 sidebarTitle = html.Div(
     [
         html.P(
@@ -34,28 +28,7 @@ sidebarTitle = html.Div(
 sidebar = html.Div(
     [
         sidebarTitle,
-        html.Hr(),
-        html.Div([
-                    html.Div(['Seleccione los departamentos'], className="mb-2  selector-label"),
-                    dcc.Dropdown(
-                    id="id_selector_municipio",
-                    options=content,
-                    value=['TODOS'],
-                    multi = True
-                )
-        ]),
-        html.Div([
-                    html.Div(['Seleccione el rango de valores'], className="mb-2 mt-2 selector-label"),
-                        dcc.Slider(0, 6, 0.01,
-                        id='slider-updatemode',
-                        marks={i: '{}'.format(10 ** i) for i in range(7)},
-                        value=6,
-                        updatemode='drag'
-                    ),
-        ]),
-        dbc.Button([
-                    'Filtrar'
-                ],id="id_filtrar",className="btn-block mt-3")
+        html.Hr()
     ],
     style=SIDEBAR_STYLE,
 )

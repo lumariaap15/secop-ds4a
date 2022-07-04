@@ -13,9 +13,9 @@ app.config.suppress_callback_exceptions=True
 # the styles for the main content position it to the right of the sidebar and
 # add some padding.
 CONTENT_STYLE = {
-    "margin-left": "300px",
-    "margin-right": "2rem",
-    "margin-top": "50px",
+    "marginLeft": "300px",
+    "marginRight": "2rem",
+    "marginTop": "50px",
     "padding": "2rem 1rem",
 }
 

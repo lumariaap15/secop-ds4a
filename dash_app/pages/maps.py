@@ -32,6 +32,43 @@ layout= html.Div(
         dbc.Card(
             [dbc.CardBody([
                 html.Div([
+                    dbc.Row(
+                            [
+                                dbc.Col(
+                                    [
+                                        html.Div([
+                                                    html.Div(['Seleccione los departamentos'], className="mb-2  selector-label"),
+                                                    dcc.Dropdown(
+                                                    id="id_selector_municipio",
+                                                    options=content,
+                                                    value=['TODOS'],
+                                                    multi = True
+                                                )
+                                        ]),
+                                    ]
+                                ),
+                                dbc.Col(
+                                    [ 
+                                        html.Div([
+                                                    html.Div(['Seleccione el rango de valores'], className="mb-2 mt-2 selector-label"),
+                                                        dcc.Slider(0, 6, 0.01,
+                                                        id='slider-updatemode',
+                                                        marks={i: '{}'.format(10 ** i) for i in range(7)},
+                                                        value=6,
+                                                        updatemode='drag'
+                                                    ),
+                                        ]),
+                                    ]
+                                )
+                            ],
+                    )
+                ]),
+                html.Div([
+                    dbc.Button([
+                        'Filtrar'
+                    ],id="id_filtrar",className="btn-block mt-3")
+                ], className="d-flex justify-content-end mb-3"),
+                html.Div([
                     mapa_colombia_departamentos.display()  
                 ],id="row_map")   
             ])],className="mb-3"
