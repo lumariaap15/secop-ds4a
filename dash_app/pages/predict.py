@@ -1,6 +1,8 @@
 from dash import Dash, dcc, html, Input, Output, State, callback
 import dash_bootstrap_components as dbc
 from dataframes.data import df2
+from datetime import date
+from datetime import datetime
 
 departamentos_options = []
 for item in df2["Departamento"].unique():
@@ -303,6 +305,28 @@ switches_input = html.Div(
     ]
 )
 
+fecha_fin_contrato_input = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(
+                    dbc.Label("Fecha de Fin del Contrato", html_for="fecha_fin_contrato"), width=3
+                ),
+                dbc.Col(
+                    dcc.DatePickerSingle(
+                        id='fecha_fin_contrato',
+                        min_date_allowed=df2["Fecha de Fin del Contrato"].min(), #date(2018, 1, 31),
+                        max_date_allowed=df2["Fecha de Fin del Contrato"].max(), #date(2022, 12, 31),
+                        initial_visible_month=date.today(), #date(2022, 7, 4),
+                        date=date.today() #date(2022, 7, 4)
+                    )
+                )
+            ],
+        )
+    ],
+    className="mb-3",
+)
+
 """
 form = dbc.Form([
     departamentos_select, 
@@ -338,14 +362,15 @@ form = dbc.Form([
                         modalidad_contratacion_select,
                         destino_gasto_select,   
                         valor_contrato_input,
+                        valor_pago_adelantado_input,
                     ]
                 ),
                 dbc.Col(
                     [ 
-                        valor_pago_adelantado_input,
                         valor_facturado_input,
                         valor_pendiente_pago_input,
                         valor_amortizado_input,
+                        fecha_fin_contrato_input,
                         switches_input,
                     ]
                 )
@@ -386,13 +411,14 @@ layout = html.Div(
      State("valor_facturado", "value"),
      State("valor_pendiente_pago", "value"),
      State("valor_amortizado", "value"),
+     State("fecha_fin_contrato", "date"),
      State("switches_input", "value")
     ]
     , prevent_initial_call=True
 )
 def update_output(n_clicks, departamento, orden, sector, rama, entidad_centralizada, estado_contrato, tipo_contrato, 
                  modalidad_contratacion, destino_gasto, valor_contrato, valor_pago_adelantado, valor_facturado,
-                 valor_pendiente_pago, valor_amortizado, switches_input):
+                 valor_pendiente_pago, valor_amortizado, fecha_fin_contrato, switches_input):
     variables = {}
     variables["Departamento"] = departamento
     variables["Orden"] = orden
@@ -420,8 +446,13 @@ def update_output(n_clicks, departamento, orden, sector, rama, entidad_centraliz
     variables["RP_NO_AGR"] = int('es_rp_no_agr' in switches_input) if switches_input != None else 0
     variables["RC"] = int('es_rc' in switches_input) if switches_input != None else 0
     
+    fecha_fin_contrato = datetime.strptime(fecha_fin_contrato, '%Y-%m-%d').date()
+    fecha_fin_ano_contrato = datetime.strptime(str(fecha_fin_contrato.year) + '-12-31', '%Y-%m-%d').date()
+    variables["Days_to_end_of_year"] = (fecha_fin_ano_contrato-fecha_fin_contrato).days  
+    
     prediction = XGBoost_predict(n_clicks)
-    return 'The delay prediction for {0} "{1}"'.format(variables, prediction['Delay prediction'])
+    #return 'The delay prediction for {0} "{1}"'.format(variables, prediction['Delay prediction'])
+    return str(variables)
 
 def prepare_model_data(x_variables):
     return x_variables
