@@ -7,6 +7,7 @@ from components.mapcol_departamentos import mapcol_departamentos
 
 from dataframes.contratos_departamento import df_maptest
 from components.table_departamentos import table
+from components.contract_type_graphs import contract_type_count_pie_chart
 
 
 mapa_colombia_departamentos = mapcol_departamentos('Cantidad de proyectos por departamento en Colombia', 'div_municipios_fig2',df_maptest)
@@ -32,18 +33,71 @@ layout= html.Div(
         dbc.Card(
             [dbc.CardBody([
                 html.Div([
+                    dbc.Row(
+                            [
+                                dbc.Col(
+                                    [
+                                        html.Div([
+                                                    html.Div(['Seleccione los departamentos'], className="mb-2  selector-label"),
+                                                    dcc.Dropdown(
+                                                    id="id_selector_municipio",
+                                                    options=content,
+                                                    value=['TODOS'],
+                                                    multi = True
+                                                )
+                                        ]),
+                                    ]
+                                ),
+                                dbc.Col(
+                                    [ 
+                                        html.Div([
+                                                    html.Div(['Seleccione el rango de valores'], className="mb-2 mt-2 selector-label"),
+                                                        dcc.Slider(0, 6, 0.01,
+                                                        id='slider-updatemode',
+                                                        marks={i: '{}'.format(10 ** i) for i in range(7)},
+                                                        value=6,
+                                                        updatemode='drag'
+                                                    ),
+                                        ]),
+                                    ]
+                                )
+                            ],
+                    )
+                ]),
+                html.Div([
+                    dbc.Button([
+                        'Filtrar'
+                    ],id="id_filtrar",className="btn-block mt-3")
+                ], className="d-flex justify-content-end mb-3"),
+                html.Div([
                     mapa_colombia_departamentos.display()  
                 ],id="row_map")   
             ])],className="mb-3"
         ),
 
-        dbc.Card(
-            dbc.CardBody([
-                html.H3("Proyectos por departamento"),
-                html.Div([
-                    tabla_datos_departamentos.display()
-                ],id="row_tabla")   
-            ])
+        
+
+        dbc.Row(
+            [dbc.Col([
+                dbc.Card(
+                    dbc.CardBody([
+                        html.H3("Proyectos por departamento"),
+                        html.Div([
+                            tabla_datos_departamentos.display()
+                        ],id="row_tabla")   
+                    ])
+                ),
+            ]),
+            dbc.Col([
+                dbc.Card(
+                    dbc.CardBody([
+                        html.H3("Contract Types"),
+                        dcc.Graph(
+                            figure=contract_type_count_pie_chart
+                        )
+                    ])
+                ),
+            ])]
         ),
     ]
 )  

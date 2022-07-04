@@ -1,6 +1,10 @@
 from dash import Dash, dcc, html, Input, Output, State, callback
 import dash_bootstrap_components as dbc
 from dataframes.data import df2
+from datetime import date
+from datetime import datetime
+import pandas as pd
+import pickle
 
 departamentos_options = []
 for item in df2["Departamento"].unique():
@@ -286,21 +290,43 @@ switches_input = html.Div(
             options=[
                 {"label": "Es Grupo", "value": "es_grupo"},
                 {"label": "Es Pyme", "value": "es_pyme"},
-                {"label": "Obligación Ambiental", "value": "obligacion_ambiental"},
-                {"label": "Obligaciones Postconsumo", "value": "obligaciones_postconsumo"},
+                {"label": "Tiene Obligación Ambiental", "value": "obligacion_ambiental"},
+                {"label": "Tiene Obligaciones Postconsumo", "value": "obligaciones_postconsumo"},
                 {"label": "Es Postconflicto", "value": "es_postconflicto"},
-                {"label": "Presupuesto General de la Nación", "value": "es_pgn"},
-                {"label": "Sistema General de Participaciones", "value": "es_sgp"},
-                {"label": "Sistema Geenral de Regalías", "value": "es_sgr"},
-                {"label": "Recursos Propios (Alcaldías Gobernaciones y Resguardos Indígenas)", "value": "es_rp_agr"},
-                {"label": "Recursos Propios", "value": "es_rp_no_agr"},
-                {"label": "Recursos de Crédito", "value": "es_rc"},
+                {"label": "Tiene Presupuesto General de la Nación", "value": "es_pgn"},
+                {"label": "Tiene Presupuesto Sistema General de Participaciones", "value": "es_sgp"},
+                {"label": "Tiene Presupuesto Sistema General de Regalías", "value": "es_sgr"},
+                {"label": "Tiene Recursos Propios (Alcaldías Gobernaciones y Resguardos Indígenas)", "value": "es_rp_agr"},
+                {"label": "Tiene Recursos Propios", "value": "es_rp_no_agr"},
+                {"label": "Tiene Recursos de Crédito", "value": "es_rc"},
             ],
             #value=[1],
             id="switches_input",
             switch=True,
         ),
     ]
+)
+
+fecha_fin_contrato_input = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(
+                    dbc.Label("Fecha de Fin del Contrato", html_for="fecha_fin_contrato"), width=3
+                ),
+                dbc.Col(
+                    dcc.DatePickerSingle(
+                        id='fecha_fin_contrato',
+                        min_date_allowed=df2["Fecha de Fin del Contrato"].min(), #date(2018, 1, 31),
+                        max_date_allowed=df2["Fecha de Fin del Contrato"].max(), #date(2022, 12, 31),
+                        initial_visible_month=date.today(), #date(2022, 7, 4),
+                        date=date.today() #date(2022, 7, 4)
+                    )
+                )
+            ],
+        )
+    ],
+    className="mb-3",
 )
 
 """
@@ -338,14 +364,15 @@ form = dbc.Form([
                         modalidad_contratacion_select,
                         destino_gasto_select,   
                         valor_contrato_input,
+                        valor_pago_adelantado_input,
                     ]
                 ),
                 dbc.Col(
                     [ 
-                        valor_pago_adelantado_input,
                         valor_facturado_input,
                         valor_pendiente_pago_input,
                         valor_amortizado_input,
+                        fecha_fin_contrato_input,
                         switches_input,
                     ]
                 )
@@ -386,13 +413,14 @@ layout = html.Div(
      State("valor_facturado", "value"),
      State("valor_pendiente_pago", "value"),
      State("valor_amortizado", "value"),
+     State("fecha_fin_contrato", "date"),
      State("switches_input", "value")
     ]
     , prevent_initial_call=True
 )
 def update_output(n_clicks, departamento, orden, sector, rama, entidad_centralizada, estado_contrato, tipo_contrato, 
                  modalidad_contratacion, destino_gasto, valor_contrato, valor_pago_adelantado, valor_facturado,
-                 valor_pendiente_pago, valor_amortizado, switches_input):
+                 valor_pendiente_pago, valor_amortizado, fecha_fin_contrato, switches_input):
     variables = {}
     variables["Departamento"] = departamento
     variables["Orden"] = orden
@@ -402,25 +430,56 @@ def update_output(n_clicks, departamento, orden, sector, rama, entidad_centraliz
     variables["Estado Contrato"] = estado_contrato
     variables["Tipo de Contrato"] = tipo_contrato
     variables["Modalidad de Contratacion"] = modalidad_contratacion
+    variables["Es Grupo"] = int('es_grupo' in switches_input) if switches_input != None else 0
+    variables["Es Pyme"] = int('es_pyme' in switches_input) if switches_input != None else 0
+    variables["Obligación Ambiental"] = int('obligacion_ambiental' in switches_input) if switches_input != None else 0
+    variables["Obligaciones Postconsumo"] = int('obligaciones_postconsumo' in switches_input) if switches_input != None else 0
+    variables["Valor del Contrato"] = int(valor_contrato)
+    variables["Valor del Pago Adelantado"] = int(valor_pago_adelantado)
+    variables["Valor Facturado"] = int(valor_facturado)
+    variables["Valor Pendiente de Pago"] = int(valor_pendiente_pago)
+    variables["Valor Amortizado"] = int(valor_amortizado)
+    variables["EsPostConflicto"] = int('es_postconflicto' in switches_input) if switches_input != None else 0
     variables["Destino Gasto"] = destino_gasto
-    variables["Valor del Contrato"] = valor_contrato
-    variables["Valor del Pago Adelantado"] = valor_pago_adelantado
-    variables["Valor Facturado"] = valor_facturado
-    variables["Valor Pendiente de Pago"] = valor_pendiente_pago
-    variables["Valor Amortizado"] = valor_amortizado
-    variables["Switches"] = switches_input
+    variables["PGN"] = int('es_pgn' in switches_input) if switches_input != None else 0
+    variables["SGP"] = int('es_sgp' in switches_input) if switches_input != None else 0
+    variables["SGR"] = int('es_sgr' in switches_input) if switches_input != None else 0
+    variables["RP_AGR"] = int('es_rp_agr' in switches_input) if switches_input != None else 0
+    variables["RP_NO_AGR"] = int('es_rp_no_agr' in switches_input) if switches_input != None else 0
+    variables["RC"] = int('es_rc' in switches_input) if switches_input != None else 0
     
-    prediction = XGBoost_predict(n_clicks)
-    return 'The delay prediction for {0} "{1}"'.format(variables, prediction['Delay prediction'])
+    fecha_fin_contrato = datetime.strptime(fecha_fin_contrato, '%Y-%m-%d').date()
+    fecha_fin_ano_contrato = datetime.strptime(str(fecha_fin_contrato.year) + '-12-31', '%Y-%m-%d').date()
+    variables["Days_to_end_of_year"] = (fecha_fin_ano_contrato-fecha_fin_contrato).days
+    
+    prediction = XGBoost_predict(variables)
+    return 'The delay prediction for this contract is {0}'.format(prediction)
+    #return str(variables)
 
-def prepare_model_data(x_variables):
-    return x_variables
+def XGBoost_predict(variables):
+    df_input = prepare_model_data(variables)
+    prediction = load_model().predict(df_input)[0]
+    return normalize_prediction(prediction)
+
+def prepare_model_data(variables):
+    df_input = pd.DataFrame.from_dict(variables, orient='index').T
+
+    cat_cols = ['Departamento', 'Orden', 'Sector', 'Rama', 'Entidad Centralizada', 'Estado Contrato', 
+                'Tipo de Contrato', 'Modalidad de Contratacion', 'Es Grupo','Es Pyme', 'Destino Gasto', 
+                'EsPostConflicto', 'Obligaciones Postconsumo', 'Obligación Ambiental']
+
+    cat_values = {key:'category' for key in cat_cols}
+    df_input = df_input.astype(cat_values)
+
+    cols = df_input.select_dtypes(include='object').columns
+    df_input[cols] = df_input[cols].astype('int')    
+    
+    return df_input
 
 def load_model():
-    model = open('model.pkl', 'rb')
-    return joblib.load(model)
+    return pickle.load(open('assets/model/clf_model.pkl', 'rb'))
 
-def XGBoost_predict(x_variables):
-    prepared_data = prepare_model_data(x_variables)
-    #prediction = load_model().predict(prepared_data)
-    return {'Delay prediction': 'No'}
+def normalize_prediction(prediction):
+    possible_results = {0: "None", 1: "Low", 2: "Medium", 3: "High"}
+    return possible_results[prediction]
+
