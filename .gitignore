@@ -4,3 +4,5 @@ data_cleaning2.ipynb
 __pycache__/
 .ipynb_checkpoints/
 models_Downsampling.ipynb
+xg_tuning.ipynb
+model_tests.ipynb
