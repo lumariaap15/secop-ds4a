@@ -6,3 +6,4 @@ __pycache__/
 models_Downsampling.ipynb
 xg_tuning.ipynb
 model_tests.ipynb
+*.pkl
