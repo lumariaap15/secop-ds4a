@@ -401,11 +401,11 @@ def update_output(n_clicks, departamento, orden, sector, rama, entidad_centraliz
     variables["Es Pyme"] = int('es_pyme' in switches_input) if switches_input != None else 0
     variables["Obligación Ambiental"] = int('obligacion_ambiental' in switches_input) if switches_input != None else 0
     variables["Obligaciones Postconsumo"] = int('obligaciones_postconsumo' in switches_input) if switches_input != None else 0
-    variables["Valor del Contrato"] = int(valor_contrato)
-    variables["Valor del Pago Adelantado"] = int(valor_pago_adelantado)
-    variables["Valor Facturado"] = int(valor_facturado)
-    variables["Valor Pendiente de Pago"] = int(valor_pendiente_pago)
-    variables["Valor Amortizado"] = int(valor_amortizado)
+    variables["Valor del Contrato"] = float(valor_contrato) if valor_contrato != None else 0
+    variables["Valor del Pago Adelantado"] = float(valor_pago_adelantado) if valor_pago_adelantado != None else 0
+    variables["Valor Facturado"] = float(valor_facturado) if valor_facturado != None else 0
+    variables["Valor Pendiente de Pago"] = float(valor_pendiente_pago) if valor_pendiente_pago != None else 0
+    variables["Valor Amortizado"] = float(valor_amortizado) if valor_amortizado != None else 0
     variables["EsPostConflicto"] = int('es_postconflicto' in switches_input) if switches_input != None else 0
     variables["Destino Gasto"] = destino_gasto
     variables["PGN"] = int('es_pgn' in switches_input) if switches_input != None else 0
@@ -444,7 +444,7 @@ def prepare_model_data(variables):
     return df_input
 
 def load_model():
-    return pickle.load(open('assets/model/clf_model.pkl', 'rb'))
+    return pickle.load(open('assets/model/model_downsampling.pkl', 'rb'))
 
 def normalize_prediction(prediction):
     possible_results = {0: "None", 1: "Low", 2: "Medium", 3: "High"}
