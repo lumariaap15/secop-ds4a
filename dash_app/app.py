@@ -10,6 +10,8 @@ from layout import sidebar
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.config.suppress_callback_exceptions=True
 
+LOGO_DS4A = "/assets/COLOMBIA MAIN SANS TAG.svg"
+
 # the styles for the main content position it to the right of the sidebar and
 # add some padding.
 CONTENT_STYLE = {
@@ -19,7 +21,17 @@ CONTENT_STYLE = {
     "padding": "2rem 1rem",
 }
 
-content = html.Div(id="page-content", style=CONTENT_STYLE)
+content = html.Div([
+    html.Div(id="page-content", style=CONTENT_STYLE),
+    html.Div(className="all-content-background"),
+    html.Div([
+        html.Div([
+            html.Div(html.A("About Us")),
+            html.Div(html.A("Datafolio"))
+        ], className="footer-links"),
+        html.Div(html.Img(src=LOGO_DS4A, width="300px"))
+    ],className="footer")
+])
 
 app.layout = html.Div([dcc.Location(id="url"), sidebar.sidebar, navbar.navbar, content])
 
@@ -41,4 +53,4 @@ def render_page_content(pathname):
 
 
 if __name__ == "__main__":
-    app.run_server(host="0.0.0.0", port="8050", debug=True)
+    app.run_server(host="0.0.0.0", port="8050", debug=False)

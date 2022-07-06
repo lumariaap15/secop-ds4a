@@ -2,6 +2,7 @@ import dash_bootstrap_components as dbc
 from dash import html
 
 LOGO_INGES = "../assets/logo_inges.png"
+LOGO_DS4A = "../assets/COLOMBIA MAIN SANS TAG.svg"
 
 navbar = dbc.Navbar(
     dbc.Container(
@@ -10,23 +11,18 @@ navbar = dbc.Navbar(
                 # Use row and col to control vertical alignment of logo / brand
                 dbc.Row(
                     [
-                        dbc.Col(html.Img(src=LOGO_INGES, width="150px")),
+                        dbc.Col([
+                            html.Img(src=LOGO_INGES, width="150px"),
+                            #html.Img(src=LOGO_DS4A, width="150px")
+                        ]),
                     ],
                     align="center",
                     className="g-0",
                 ),
                 href="https://plotly.com",
                 style={"textDecoration": "none"},
-            ),
-            html.Div(
-                [
-                    dbc.NavItem(dbc.NavLink("Dashboard", href="/")),
-                    dbc.NavItem(dbc.NavLink("Predict", href="/predict"))
-                ],
-                style={"display": "flex"}
-            ),
-            
-        ]
+            ),          
+        ], className="d-flex justify-content-center"
     ),
     color="white",
     dark=False,

@@ -3,6 +3,8 @@ import dash_bootstrap_components as dbc
 
 from dataframes.contratos_departamento import df_maptest
 
+LOGO_DS4A = "../assets/Asset 5.svg"
+
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 
 SIDEBAR_STYLE = {
@@ -13,22 +15,38 @@ SIDEBAR_STYLE = {
     "width": "300px",
     "padding": "2rem 1rem",
     "backgroundColor": "#F8F9F9",
-    "marginTop": "50px"
+    "marginTop": "50px",
+    "display":"flex",
+    "flexDirection":"column",
+    "justifyContent": "space-between",
+    "alignItems": "center",
+    "boxShadow": "5px 5px 10px rgba(0,0,0,.05)"
 }
 
 sidebarTitle = html.Div(
     [
         html.P(
-            "Public contracts delay classificator", className="sidebar-subtitle"
+            "Colombian public contracting analytics dashboard", className="sidebar-subtitle"
         ),
-        html.H1("Colombian Public Contracting Analytics Dashboard")
+        html.H1(["Public Contracts Delay Classificator"],style={"fontSize":"30px"})
     ]
 )
 
 sidebar = html.Div(
     [
-        sidebarTitle,
-        html.Hr()
+        html.Div([
+            sidebarTitle,
+            html.Hr(),
+            dbc.Nav(
+                [
+                    dbc.NavLink("Dashboard", href="/", active="exact"),
+                    dbc.NavLink("Predict", href="/predict", active="exact")
+                ],
+                vertical=True,
+                pills=True,
+            ),
+        ]),
+        html.Div([html.Img(src=LOGO_DS4A, width="150px")])
     ],
     style=SIDEBAR_STYLE,
 )

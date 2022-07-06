@@ -384,8 +384,8 @@ form = dbc.Form([
 
 layout = html.Div(
     [
-        html.H3("Contracts Delay Prediction"),
-        html.H6("Select the contract variables and press button below to see the prediction"),
+        html.H3(["Contracts Delay Prediction"],className="text-white"),
+        html.H6(["Select the contract variables and press button below to see the prediction"],className="text-white"),
         dbc.Card([form], className="p-3"),        
         #html.Br(),
         #html.Div(dcc.Input(id='input-on-submit', type='text')),
