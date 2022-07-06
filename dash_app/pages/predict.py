@@ -14,12 +14,10 @@ departamentos_select = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Departamento", html_for="departamento"), width=3
-                ),
-                dbc.Col(
                     dcc.Dropdown(
                         id="departamento",
                         options=departamentos_options,
+                        placeholder="Departamento"
                     )
                 ),
             ],
@@ -36,12 +34,10 @@ orden_select = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Orden", html_for="orden"), width=3
-                ),
-                dbc.Col(
                     dcc.Dropdown(
                         id="orden",
                         options=orden_options,
+                        placeholder="Orden"
                     )
                 ),
             ],
@@ -58,12 +54,10 @@ sector_select = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Sector", html_for="sector"), width=3
-                ),
-                dbc.Col(
                     dcc.Dropdown(
                         id="sector",
                         options=sector_options,
+                        placeholder="Sector"
                     )
                 ),
             ],
@@ -80,12 +74,10 @@ rama_select = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Rama", html_for="rama"), width=3
-                ),
-                dbc.Col(
                     dcc.Dropdown(
                         id="rama",
                         options=rama_options,
+                        placeholder="Rama"
                     )
                 ),
             ],
@@ -102,12 +94,10 @@ entidad_centralizada_select = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Entidad Centralizada", html_for="entidad_centralizada"), width=3
-                ),
-                dbc.Col(
                     dcc.Dropdown(
                         id="entidad_centralizada",
                         options=entidad_centralizada_options,
+                        placeholder="Entidad Centralizada"
                     )
                 ),
             ],
@@ -124,12 +114,10 @@ estado_contrato_select = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Estado Contrato", html_for="estado_contrato"), width=3
-                ),
-                dbc.Col(
                     dcc.Dropdown(
                         id="estado_contrato",
                         options=estado_contrato_options,
+                        placeholder="Estado Contrato"
                     )
                 ),
             ],
@@ -146,12 +134,10 @@ tipo_contrato_select = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Tipo de Contrato", html_for="tipo_contrato"), width=3
-                ),
-                dbc.Col(
                     dcc.Dropdown(
                         id="tipo_contrato",
                         options=tipo_contrato_options,
+                        placeholder="Tipo de Contrato"
                     )
                 ),
             ],
@@ -168,12 +154,10 @@ modalidad_contratacion_select = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Modalidad de Contratación", html_for="modalidad_contratacion"), width=3
-                ),
-                dbc.Col(
                     dcc.Dropdown(
                         id="modalidad_contratacion",
                         options=modalidad_contratacion_options,
+                        placeholder="Modalidad de Contratación"
                     )
                 ),
             ],
@@ -190,12 +174,10 @@ destino_gasto_select = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Destino Gasto", html_for="destino_gasto"), width=3
-                ),
-                dbc.Col(
                     dcc.Dropdown(
                         id="destino_gasto",
                         options=destino_gasto_options,
+                        placeholder="Destino Gasto"
                     )
                 ),
             ],
@@ -209,10 +191,7 @@ valor_contrato_input = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Valor del Contrato", html_for="valor_contrato"), width=3
-                ),
-                dbc.Col(
-                    dbc.Input(type="number", id="valor_contrato", value="0")
+                    dbc.Input(type="number", id="valor_contrato", placeholder="Valor del Contrato")
                 )
             ],
         )
@@ -225,10 +204,7 @@ valor_pago_adelantado_input = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Valor del Pago Adelantado", html_for="valor_pago_adelantado"), width=3
-                ),
-                dbc.Col(
-                    dbc.Input(type="number", id="valor_pago_adelantado", value="0")
+                    dbc.Input(type="number", id="valor_pago_adelantado", placeholder="Valor del Pago Adelantado")
                 )
             ],
         )
@@ -241,10 +217,7 @@ valor_facturado_input = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Valor Facturado", html_for="valor_facturado"), width=3
-                ),
-                dbc.Col(
-                    dbc.Input(type="number", id="valor_facturado", value="0")
+                    dbc.Input(type="number", id="valor_facturado", placeholder="Valor Facturado")
                 )
             ],
         )
@@ -257,10 +230,7 @@ valor_pendiente_pago_input = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Valor Pendiente de Pago", html_for="valor_pendiente_pago"), width=3
-                ),
-                dbc.Col(
-                    dbc.Input(type="number", id="valor_pendiente_pago", value="0")
+                    dbc.Input(type="number", id="valor_pendiente_pago", placeholder="Valor Pendiente de Pago")
                 )
             ],
         )
@@ -273,10 +243,7 @@ valor_amortizado_input = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label("Valor Amortizado", html_for="valor_amortizado"), width=3
-                ),
-                dbc.Col(
-                    dbc.Input(type="number", id="valor_amortizado", value="0")
+                    dbc.Input(type="number", id="valor_amortizado", placeholder="Valor Amortizado")
                 )
             ],
         )
@@ -386,13 +353,13 @@ layout = html.Div(
     [
         html.H3(["Contracts Delay Prediction"],className="text-white"),
         html.H6(["Select the contract variables and press button below to see the prediction"],className="text-white"),
-        dbc.Card([form], className="p-3"),        
-        #html.Br(),
-        #html.Div(dcc.Input(id='input-on-submit', type='text')),
-        dbc.Button(['Predict'],id="submit_val", className="btn-block mt-3", n_clicks=0),
-        html.Br(),
-        html.Br(),
-        html.Div(id='container', children='')
+        dbc.Card([
+            form,
+            html.Div([
+                dbc.Button(['Predict'],id="submit_val", className="mt-3", n_clicks=0),
+            ],className="d-flex justify-content-center"),
+            html.Div(id='container', children='')   
+        ], className="p-3"),        
     ]
 )
 

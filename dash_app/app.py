@@ -6,11 +6,10 @@ from pages import maps
 from pages import predict
 from layout import navbar
 from layout import sidebar
+from layout import footer
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.config.suppress_callback_exceptions=True
-
-LOGO_DS4A = "/assets/COLOMBIA MAIN SANS TAG.svg"
 
 # the styles for the main content position it to the right of the sidebar and
 # add some padding.
@@ -24,13 +23,7 @@ CONTENT_STYLE = {
 content = html.Div([
     html.Div(id="page-content", style=CONTENT_STYLE),
     html.Div(className="all-content-background"),
-    html.Div([
-        html.Div([
-            html.Div(html.A("About Us")),
-            html.Div(html.A("Datafolio"))
-        ], className="footer-links"),
-        html.Div(html.Img(src=LOGO_DS4A, width="300px"))
-    ],className="footer")
+    footer.footer
 ])
 
 app.layout = html.Div([dcc.Location(id="url"), sidebar.sidebar, navbar.navbar, content])
