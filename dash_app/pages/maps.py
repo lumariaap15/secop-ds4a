@@ -10,7 +10,7 @@ from components.table_departamentos import table
 from components.contract_type_graphs import contract_type_count_pie_chart
 
 
-mapa_colombia_departamentos = mapcol_departamentos('Number of projects by department in Colombia', 'div_municipios_fig2',df_maptest)
+mapa_colombia_departamentos = mapcol_departamentos('Number of contracts by department in Colombia', 'div_municipios_fig2',df_maptest)
 
 
 params1 = {
@@ -81,7 +81,7 @@ layout= html.Div(
             [dbc.Col([
                 dbc.Card(
                     dbc.CardBody([
-                        html.H3("Projects by department"),
+                        html.H3("Contracts by department"),
                         html.Div([
                             tabla_datos_departamentos.display()
                         ],id="row_tabla")   
@@ -112,7 +112,7 @@ layout= html.Div(
         ],prevent_initial_call=True
     )
 def update_map(selector_municipio,selector_year,nclicks):
-        mapa_colombia_departamentos = mapcol_departamentos('Number of projects by department in Colombia', 'div_municipios_fig2',df_maptest)
+        mapa_colombia_departamentos = mapcol_departamentos('Number of contracts by department in Colombia', 'div_municipios_fig2',df_maptest)
         df_filtrado = mapa_colombia_departamentos.df[mapa_colombia_departamentos.df['DEPARTAMENTO'].isin(selector_municipio)]
         #df_filtrado = df_filtrado[df_filtrado['COUNT']<(10**selector_year)]
         mapa_colombia_departamentos.df = df_filtrado

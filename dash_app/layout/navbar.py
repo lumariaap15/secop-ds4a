@@ -12,7 +12,7 @@ navbar = dbc.Navbar(
                 dbc.Row(
                     [
                         dbc.Col([
-                            html.Img(src=LOGO_INGES, width="150px"),
+                            html.Img(src=LOGO_INGES, width="200px"),
                             #html.Img(src=LOGO_DS4A, width="150px")
                         ]),
                     ],
