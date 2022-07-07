@@ -26,7 +26,7 @@ SIDEBAR_STYLE = {
 sidebarTitle = html.Div(
     [
         html.P(
-            "Colombian public contracting analytics dashboard", className="sidebar-subtitle"
+            "Team 219", className="sidebar-subtitle"
         ),
         html.H1(["Public Contracts Delay Classificator"],style={"fontSize":"30px"})
     ]

@@ -19,7 +19,7 @@ navbar = dbc.Navbar(
                     align="center",
                     className="g-0",
                 ),
-                href="https://plotly.com",
+                href="/about",
                 style={"textDecoration": "none"},
             ),          
         ], className="d-flex justify-content-center"
