@@ -4,9 +4,12 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 from pages import maps
 from pages import predict
+from pages import dashboard
+from pages import about_us
 from layout import navbar
 from layout import sidebar
 from layout import footer
+from pages import datafolio
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.config.suppress_callback_exceptions=True
@@ -31,10 +34,16 @@ app.layout = html.Div([dcc.Location(id="url"), sidebar.sidebar, navbar.navbar, c
 
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
-    if pathname == "/":
+    if pathname == "/map1":
         return maps.layout
     elif pathname == "/predict":
         return predict.layout
+    elif pathname == "/":
+        return dashboard.layout
+    elif pathname == "/about":
+        return about_us.layout
+    elif pathname == "/datafolio":
+        return datafolio.layout
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
         [
