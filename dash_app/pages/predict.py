@@ -6,6 +6,17 @@ from datetime import datetime
 import pandas as pd
 import pickle
 
+drop = ['NormalizedDelay','Unnamed: 0', 'Nombre Entidad','Dias Adicionados', 
+        'Fecha de Inicio del Contrato', 'Fecha de Fin del Contrato']
+
+df = pd.read_csv('assets/csv/SECOP_Electronicos_Cleaned.csv').drop(drop, axis=1)
+
+cat_cols = ['Departamento', 'Orden', 'Sector', 'Rama','Entidad Centralizada', 'Estado Contrato', 
+            'Tipo de Contrato', 'Modalidad de Contratacion', 'Es Grupo','Es Pyme', 'Destino Gasto', 'EsPostConflicto',
+            'Obligaciones Postconsumo','Obligación Ambiental', 'Delay']
+cat_values = {key:'category' for key in cat_cols}
+df = df.astype(cat_values)
+
 departamentos_options = []
 for item in df2["Departamento"].unique():
     departamentos_options.append({"label": item, "value": item})
@@ -388,7 +399,10 @@ layout = html.Div(
 def update_output(n_clicks, departamento, orden, sector, rama, entidad_centralizada, estado_contrato, tipo_contrato, 
                  modalidad_contratacion, destino_gasto, valor_contrato, valor_pago_adelantado, valor_facturado,
                  valor_pendiente_pago, valor_amortizado, fecha_fin_contrato, switches_input):
+    
+    bools = ("No", "Si")
     variables = {}
+    
     variables["Departamento"] = departamento
     variables["Orden"] = orden
     variables["Sector"] = sector
@@ -397,16 +411,16 @@ def update_output(n_clicks, departamento, orden, sector, rama, entidad_centraliz
     variables["Estado Contrato"] = estado_contrato
     variables["Tipo de Contrato"] = tipo_contrato
     variables["Modalidad de Contratacion"] = modalidad_contratacion
-    variables["Es Grupo"] = int('es_grupo' in switches_input) if switches_input != None else 0
-    variables["Es Pyme"] = int('es_pyme' in switches_input) if switches_input != None else 0
-    variables["Obligación Ambiental"] = int('obligacion_ambiental' in switches_input) if switches_input != None else 0
-    variables["Obligaciones Postconsumo"] = int('obligaciones_postconsumo' in switches_input) if switches_input != None else 0
+    variables["Es Grupo"] = bools['es_grupo' in switches_input] if switches_input != None else "No"
+    variables["Es Pyme"] = bools['es_pyme' in switches_input] if switches_input != None else "No"
+    variables["Obligación Ambiental"] = bools['obligacion_ambiental' in switches_input] if switches_input != None else "No"
+    variables["Obligaciones Postconsumo"] = bools['obligaciones_postconsumo' in switches_input] if switches_input != None else "No"
     variables["Valor del Contrato"] = float(valor_contrato) if valor_contrato != None else 0
-    variables["Valor del Pago Adelantado"] = float(valor_pago_adelantado) if valor_pago_adelantado != None else 0
+    variables["Valor de pago adelantado"] = float(valor_pago_adelantado) if valor_pago_adelantado != None else 0
     variables["Valor Facturado"] = float(valor_facturado) if valor_facturado != None else 0
     variables["Valor Pendiente de Pago"] = float(valor_pendiente_pago) if valor_pendiente_pago != None else 0
     variables["Valor Amortizado"] = float(valor_amortizado) if valor_amortizado != None else 0
-    variables["EsPostConflicto"] = int('es_postconflicto' in switches_input) if switches_input != None else 0
+    variables["EsPostConflicto"] = bools['es_postconflicto' in switches_input] if switches_input != None else "No"
     variables["Destino Gasto"] = destino_gasto
     variables["PGN"] = int('es_pgn' in switches_input) if switches_input != None else 0
     variables["SGP"] = int('es_sgp' in switches_input) if switches_input != None else 0
@@ -429,19 +443,44 @@ def XGBoost_predict(variables):
     return normalize_prediction(prediction)
 
 def prepare_model_data(variables):
-    df_input = pd.DataFrame.from_dict(variables, orient='index').T
+    cols = ['Departamento', 'Orden', 'Sector', 'Rama', 'Entidad Centralizada',
+           'Estado Contrato', 'Tipo de Contrato', 'Modalidad de Contratacion',
+           'Es Grupo', 'Es Pyme', 'Obligación Ambiental',
+           'Obligaciones Postconsumo', 'Valor del Contrato',
+           'Valor de pago adelantado', 'Valor Facturado',
+           'Valor Pendiente de Pago', 'Valor Amortizado', 'EsPostConflicto',
+           'Destino Gasto', 'PGN', 'SGP', 'SGR', 'RP_AGR', 'RP_NO_AGR', 'RC', 'Days_to_end_of_year']
+    new_df = df[df["Delay"] == 2][cols].head(1)
 
-    cat_cols = ['Departamento', 'Orden', 'Sector', 'Rama', 'Entidad Centralizada', 'Estado Contrato', 
-                'Tipo de Contrato', 'Modalidad de Contratacion', 'Es Grupo','Es Pyme', 'Destino Gasto', 
-                'EsPostConflicto', 'Obligaciones Postconsumo', 'Obligación Ambiental']
+    index = new_df.iloc[[0]].index
+    new_df.loc[index, "Departamento"] = variables["Departamento"]
+    new_df.loc[index, "Orden"] = variables["Orden"]
+    new_df.loc[index, "Sector"] = variables["Sector"]
+    new_df.loc[index, "Rama"] = variables["Rama"]
+    new_df.loc[index, "Entidad Centralizada"] = variables["Entidad Centralizada"]
+    new_df.loc[index, "Estado Contrato"] = variables["Estado Contrato"]
+    new_df.loc[index, "Tipo de Contrato"] = variables["Tipo de Contrato"]
+    new_df.loc[index, "Modalidad de Contratacion"] = variables["Modalidad de Contratacion"]
+    new_df.loc[index, "Es Grupo"] = variables["Es Grupo"]
+    new_df.loc[index, "Es Pyme"] = variables["Es Pyme"]
+    new_df.loc[index, "Obligación Ambiental"] = variables["Obligación Ambiental"]
+    new_df.loc[index, "Obligaciones Postconsumo"] = variables["Obligaciones Postconsumo"]
+    new_df.loc[index, "Valor del Contrato"] = variables["Valor del Contrato"]
+    new_df.loc[index, "Valor de pago adelantado"] = variables["Valor de pago adelantado"]
+    new_df.loc[index, "Valor Facturado"] = variables["Valor Facturado"]
+    new_df.loc[index, "Valor Pendiente de Pago"] = variables["Valor Pendiente de Pago"]
+    new_df.loc[index, "Valor Amortizado"] = variables["Valor Amortizado"]
+    new_df.loc[index, "EsPostConflicto"] = variables["EsPostConflicto"]
+    new_df.loc[index, "Destino Gasto"] = None
+    new_df.loc[index, "PGN"] = variables["PGN"]
+    new_df.loc[index, "SGP"] = variables["SGP"]
+    new_df.loc[index, "SGR"] = variables["SGR"]
+    new_df.loc[index, "RP_AGR"] = variables["RP_AGR"]
+    new_df.loc[index, "RP_NO_AGR"] = variables["RP_NO_AGR"]
+    new_df.loc[index, "RC"] = variables["RC"]
+    new_df.loc[index, "Days_to_end_of_year"] = variables["Days_to_end_of_year"]
 
-    cat_values = {key:'category' for key in cat_cols}
-    df_input = df_input.astype(cat_values)
-
-    cols = df_input.select_dtypes(include='object').columns
-    df_input[cols] = df_input[cols].astype('int')    
-    
-    return df_input
+    return new_df
 
 def load_model():
     return pickle.load(open('assets/model/model_downsampling.pkl', 'rb'))
