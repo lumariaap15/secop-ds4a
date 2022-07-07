@@ -10,19 +10,19 @@ from components.table_departamentos import table
 from components.contract_type_graphs import contract_type_count_pie_chart
 
 
-mapa_colombia_departamentos = mapcol_departamentos('Cantidad de proyectos por departamento en Colombia', 'div_municipios_fig2',df_maptest)
+mapa_colombia_departamentos = mapcol_departamentos('Number of projects by department in Colombia', 'div_municipios_fig2',df_maptest)
 
 
 params1 = {
             'title': '', 
-            'description': 'Lista de departamentos  (Los valores de la columna TOTAL estan en miles de millones)',
+            'description': 'List of departments (The values ​​of the TOTAL column are in billions)',
             'columns': [ 'DEPARTAMENTO',  'CANTIDAD', 'TOTAL']
 }
 tabla_datos_departamentos = table(df_maptest,params1)
 
 
 info = {}
-content = [{"label": "TODOS", "value": "TODOS"}]
+content = [{"label": "All", "value": "All"}]
 for iframe in df_maptest.DEPARTAMENTO:
     info = { 'label': iframe , 'value': iframe}
     content.append(info)      
@@ -38,11 +38,11 @@ layout= html.Div(
                                 dbc.Col(
                                     [
                                         html.Div([
-                                                    html.Div(['Seleccione los departamentos'], className="mb-2  selector-label"),
+                                                    html.Div(['Select the departments'], className="mb-2  selector-label"),
                                                     dcc.Dropdown(
                                                     id="id_selector_municipio",
                                                     options=content,
-                                                    value=['TODOS'],
+                                                    value=['All'],
                                                     multi = True
                                                 )
                                         ]),
@@ -51,7 +51,7 @@ layout= html.Div(
                                 dbc.Col(
                                     [ 
                                         html.Div([
-                                                    html.Div(['Seleccione el rango de valores'], className="mb-2 mt-2 selector-label"),
+                                                    html.Div(['Select the range of values'], className="mb-2 mt-2 selector-label"),
                                                         dcc.Slider(0, 6, 0.01,
                                                         id='slider-updatemode',
                                                         marks={i: '{}'.format(10 ** i) for i in range(7)},
@@ -66,7 +66,7 @@ layout= html.Div(
                 ]),
                 html.Div([
                     dbc.Button([
-                        'Filtrar'
+                        'Filter'
                     ],id="id_filtrar",className="btn-block mt-3")
                 ], className="d-flex justify-content-end mb-3"),
                 html.Div([
@@ -81,7 +81,7 @@ layout= html.Div(
             [dbc.Col([
                 dbc.Card(
                     dbc.CardBody([
-                        html.H3("Proyectos por departamento"),
+                        html.H3("Projects by department"),
                         html.Div([
                             tabla_datos_departamentos.display()
                         ],id="row_tabla")   
@@ -112,6 +112,7 @@ layout= html.Div(
         ],prevent_initial_call=True
     )
 def update_map(selector_municipio,selector_year,nclicks):
+        mapa_colombia_departamentos = mapcol_departamentos('Number of projects by department in Colombia', 'div_municipios_fig2',df_maptest)
         df_filtrado = mapa_colombia_departamentos.df[mapa_colombia_departamentos.df['DEPARTAMENTO'].isin(selector_municipio)]
         #df_filtrado = df_filtrado[df_filtrado['COUNT']<(10**selector_year)]
         mapa_colombia_departamentos.df = df_filtrado
