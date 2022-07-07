@@ -18,8 +18,8 @@ layout=  dbc.Container(
             [
                 dbc.Col([
                     html.H2([
-                        "ABOUT TEAM 2019"
-                    ]),
+                        "ABOUT TEAM 219"
+                    ],className="text-white"),
                 ], align="center")
             ]),
         dbc.Row(
@@ -27,7 +27,7 @@ layout=  dbc.Container(
                 dbc.Col([
                     html.Div([
                         "We think, design and build..."
-                    ]),
+                    ],className="text-white mb-3"),
                 ], align="center")
             ]),
         dbc.Row(
