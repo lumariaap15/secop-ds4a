@@ -11,7 +11,7 @@ layout=  dbc.Container(
                         dbc.Col([
                             html.Div([
                                 dbc.CardImg(
-                                src='assets/DS4A_DATAFOLIO.jpg',
+                                src='assets/DS4A_DATAFOLIO.png',
                             )
                             ])
                         ], align="center")
