@@ -49,12 +49,6 @@ sidebar = html.Div(
         ]),
         html.Div([html.Img(src=LOGO_DS4A, width="150px")])
     ],
-    style=SIDEBAR_STYLE,
-)
-
-sidebar2 = html.Div(
-    [
-        sidebarTitle
-    ],
+    id="sidebar",
     style=SIDEBAR_STYLE,
 )
